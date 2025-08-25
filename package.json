@@ -1,0 +1,17 @@
+{
+	"name": "seva-sahayog-monorepo",
+	"private": true,
+	"version": "1.0.0",
+	"description": "Seva Sahayog Donation Matching Portal",
+	"workspaces": [
+		"frontend",
+		"server",
+		"client",
+		"backend"
+	],
+	"scripts": {
+		"dev": "npm --prefix frontend run dev",
+		"build": "npm --prefix frontend run build",
+		"preview": "npm --prefix frontend run preview"
+	}
+}
