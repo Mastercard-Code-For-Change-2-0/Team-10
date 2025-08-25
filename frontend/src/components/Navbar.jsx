@@ -1,4 +1,16 @@
 import { Link, NavLink } from 'react-router-dom'
+import { useI18n } from '../contexts/I18nContext.jsx'
+
+function TranslateGlyph({ size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="2" y="3" width="10" height="10" rx="2" fill="#19486A" />
+      <rect x="12" y="11" width="10" height="10" rx="2" fill="#FDCA00" />
+      <path d="M6 11l2-6h2l2 6h-1.8l-.4-1.4H8.2L7.8 11H6zm2.6-2.8h1.3L9.2 6.4 8.6 8.2z" fill="#ffffff" />
+      <path d="M16 19c1.5 0 2.8-1.1 3-2.6h-2.1c-.1.4-.5.6-.9.6-.6 0-1-.5-1-1 0-.5.3-.8.7-1 .3-.1.8-.2 1.3-.2V13h-1v-.8h1.9V11h1v1.2h1v.8h-1v.8c-.8 0-1.4 0-1.8.2-.5.2-.8.6-.8 1.2 0 1.1.9 1.8 1.9 1.8z" fill="#111111" />
+    </svg>
+  )
+}
 
 const navLinkStyle = ({ isActive }) => ({
   padding: '10px 14px',
@@ -9,6 +21,12 @@ const navLinkStyle = ({ isActive }) => ({
 })
 
 export default function Navbar() {
+  const { t, lang, setLang } = useI18n()
+  const cycleLang = () => {
+    const order = ['en', 'hi', 'mr']
+    const i = order.indexOf(lang)
+    setLang(order[(i + 1) % order.length])
+  }
   return (
     <header style={{ position: 'sticky', top: 0, zIndex: 40, backdropFilter: 'saturate(1.2) blur(6px)' }}>
       <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0' }}>
@@ -18,15 +36,26 @@ export default function Navbar() {
         </Link>
 
         <nav style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <NavLink to="/" style={navLinkStyle}>Home</NavLink>
-          <NavLink to="/donate" style={navLinkStyle}>Donate</NavLink>
-          <NavLink to="/requests" style={navLinkStyle}>Requests</NavLink>
-          <NavLink to="/about" style={navLinkStyle}>About</NavLink>
+          <NavLink to="/" style={navLinkStyle}>{t('home')}</NavLink>
+          <NavLink to="/donate" style={navLinkStyle}>{t('donate')}</NavLink>
+          <NavLink to="/requests" style={navLinkStyle}>{t('requests')}</NavLink>
+          <NavLink to="/about" style={navLinkStyle}>{t('about')}</NavLink>
         </nav>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <Link to="/login" className="pill btn-outline" style={{ fontWeight: 700 }}>Log in</Link>
-          <Link to="/signup" className="pill" style={{ background: 'linear-gradient(135deg, #FDCA00, #ffd84a)', color: '#111', fontWeight: 800 }}>Sign up</Link>
+          <button
+            type="button"
+            onClick={cycleLang}
+            className="pill btn-outline"
+            aria-label={`Change language. Current ${lang.toUpperCase()}`}
+            title={`Language: ${lang.toUpperCase()} (click to change)`}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
+          >
+            <TranslateGlyph />
+            <span style={{ fontWeight: 800, color: '#19486A' }}>{lang.toUpperCase()}</span>
+          </button>
+          <Link to="/login" className="pill btn-outline" style={{ fontWeight: 700 }}>{t('login')}</Link>
+          <Link to="/signup" className="pill" style={{ background: 'linear-gradient(135deg, #FDCA00, #ffd84a)', color: '#111', fontWeight: 800 }}>{t('signup')}</Link>
         </div>
       </div>
       <div style={{ height: 1, background: 'linear-gradient(90deg, rgba(25,72,106,.2), rgba(253,202,0,.2))' }} />
