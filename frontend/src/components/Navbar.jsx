@@ -69,12 +69,13 @@ export default function Navbar() {
             <span style={{ fontWeight: 800, color: '#19486A' }}>{lang.toUpperCase()}</span>
           </button>
           <div className="dropdown">
-            <button className="pill btn-outline" title={`Role: ${user.role}`}>Role: {user.role}</button>
-            <div className="dropdown-menu" style={{ position: 'absolute', right: 0, marginTop: 6, background: '#fff', border: '1px solid #eee', borderRadius: 12, padding: 8, display: 'grid', gap: 6 }}>
+            {/* <button className="pill btn-outline" title={`Role: ${user.role}`}>Role: {user.role}</button> */}
+            <div className="dropdown-menu" style={{ position: 'absolute', right: -118, marginTop: -19, background: '#fff', border: '1px solid #eee', borderRadius: 12, padding: 8, display: 'grid', gap: 6 }}>
               <button className="pill btn-outline" onClick={()=> loginAs('admin')}><Link to="/admin">Admin</Link></button>
               <button className="pill btn-outline" onClick={()=> loginAs('receiver')}><Link to="/receiver">Receiver</Link></button>
               <button className="pill btn-outline" onClick={()=> loginAs('donor')}><Link to="/donor">Donor</Link></button>
               <button className="pill btn-outline" onClick={logout}>Logout</button>
+              
             </div>
           </div>
           <Link to="/login" className="pill btn-outline" style={{ fontWeight: 700 }}>{t('login')}</Link>
@@ -85,3 +86,4 @@ export default function Navbar() {
     </header>
   )
 }
+

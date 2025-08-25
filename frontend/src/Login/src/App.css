@@ -1,0 +1,98 @@
+.login-container {
+  height: 100vh;
+  width:100vw;
+  font-family: 'Segoe UI', sans-serif;
+  align-items: center;
+  justify-content: center;
+  background-color:#7a7691 ;
+  background: linear-gradient(to bottom right,rgb(231, 201, 201),rgb(171, 171, 222),rgb(225, 190, 196));
+  gap:10px;
+  display:flex;
+}
+.logo {
+  font-size: 2rem;
+  font-weight: bold;
+}
+.tagline {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.form-section {
+  background-color: #312d53;
+  color: white;
+  width:25%;
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 10px;
+
+}
+
+.form-section h2 {
+  margin-bottom: 10px;
+}
+
+.login-link {
+  margin-bottom: 20px;
+}
+
+form input {
+  margin-bottom: 15px;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  width: 95%;
+}
+
+.terms {
+  display: flex;
+  align-items: flex-start;
+  justify-content:flex-start;
+  margin-bottom: 20px;
+  
+}
+
+.terms input[type="checkbox"] {
+  margin:0;   
+  margin-left:-190px;
+  margin-top: 6px;
+}
+.terms label{
+  margin-left: -190px;
+}
+
+.submit-button {
+  background-color: #6c63ff;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.social-login {
+  display: flex;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.social-login button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #6c63ff;
+  color: white;
+}
+.login{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.form select{
+  width:60%
+}
