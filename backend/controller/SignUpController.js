@@ -23,8 +23,7 @@ const SignUpController = async (req, res) => {
         });
 
         await newOrg.save();
-        console.log(newOrg);
-        res.status(201).json({ 
+        res.json({ 
             message: "Account created successfully.",
             success: true,
             data: {

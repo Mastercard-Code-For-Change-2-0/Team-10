@@ -25,7 +25,12 @@ const Signup = () => {
     const handleSubmit = async (e) => { 
         e.preventDefault();
         try {
+            if( formData.organisationName === "" || formData.email === "" || formData.password === "" || formData.role === ""){
+                handleError("Please fill all the fields");
+                return;
+            }
             const response = await axios.post("http://localhost:8080/auth/signup", formData);
+            console.log(response);
             if (response.data.success) {
                 handleSuccess("Signup successful, please login to continue....");
                 //window.location.href = "/login";

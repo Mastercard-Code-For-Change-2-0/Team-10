@@ -18,25 +18,26 @@ const Login = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        try{
-            axios.post("http://localhost:8080/auth/login", formData)
-            .then((res) => {
-                if(res.data.success){
-                    handleSuccess("Login successful");
-                    localStorage.setItem("token", res.data.token);
-                    window.location.href = "/dashboard"; 
-                }else{
-                    handleError(res.data.message);
-                }
-            })
-            .catch((err) => {
-                console.error("Login error:", err);
-                alert("Login failed. Please check your credentials.");
-            });
-        }catch(err){
-            console.error("Error during login:", err);
+        try {
+            const res = await axios.post("http://localhost:8080/auth/login", formData);
+            if (res.data.success) {
+                handleSuccess("Login successful!");
+                const { token, role } = res.data;
+                localStorage.setItem("token", token);
+                localStorage.setItem("role", role);
+                window.location.href = `/${role}/dashboard`;
+    
+            } else {
+                // Handle cases where the server returns success: false (e.g., wrong password)
+                handleError(res.data.message);
+            }
+        } catch (err) {
+            // Handle network errors or server crashes (e.g., 404, 500)
+            console.error("Login error:", err);
+            const errorMessage = err.response?.data?.message || "Login failed. Please check your credentials.";
+            handleError(errorMessage);
         }
     };
 

@@ -23,7 +23,7 @@ const LoginController = async (req, res) => {
         }
 
         const jwtToken = jwt.sign(
-            { email: user.email, _id: user._id },
+            { email: user.email, _id: user._id , role : user.role},
             process.env.JWT_SECRET,
             { expiresIn: "24h" }
         );
@@ -31,7 +31,8 @@ const LoginController = async (req, res) => {
         return res.status(200).json({
             message: "Login successful",
             success: true,
-            token: jwtToken
+            token: jwtToken,
+            role : user.role
         });
     } catch (error) {
         return res.status(500).json({
