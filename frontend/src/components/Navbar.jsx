@@ -23,21 +23,13 @@ const navLinkStyle = ({ isActive }) => ({
 
 export default function Navbar() {
   const { t, lang, setLang } = useI18n()
-  const { user, loginAs, logout } = useAuth()
+  const { user, logout } = useAuth()
   const cycleLang = () => {
     const order = ['en', 'hi', 'mr']
     const i = order.indexOf(lang)
     setLang(order[(i + 1) % order.length])
   }
-  const notes = [
-    { id: 'n1', text: 'Donation approved' },
-    { id: 'n2', text: 'New match suggestion' },
-  ]
-  const [open, setOpen] = (function(){
-    // simple inline state without importing useState to keep file small
-    let o = false
-    return [o, (v)=>{ o=v }]
-  })()
+
   return (
     <header style={{ position: 'sticky', top: 0, zIndex: 40, backdropFilter: 'saturate(1.2) blur(6px)' }}>
       <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0' }}>
@@ -48,15 +40,19 @@ export default function Navbar() {
 
         <nav style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <NavLink to="/" style={navLinkStyle}>{t('home')}</NavLink>
-          <NavLink to="/donate" style={navLinkStyle}>{t('donate')}</NavLink>
+          {user.role === 'donor' && <NavLink to="/donate" style={navLinkStyle}>{t('donate')}</NavLink>}
+          {user.role === 'receiver' && <NavLink to="/request" style={navLinkStyle}>Request</NavLink>}
           <NavLink to="/browse" style={navLinkStyle}>Browse</NavLink>
           <NavLink to="/about" style={navLinkStyle}>{t('about')}</NavLink>
+          {user.role === 'admin' && <NavLink to="/admin" style={navLinkStyle}>Admin Dashboard</NavLink>}
         </nav>
 
-  <div style={{ display: 'flex', alignItems: 'center', gap: 12, position: 'relative' }}>
-          <Link to="/notifications" className="pill btn-outline" title="Notifications" aria-label="Notifications">
-            🔔
-          </Link>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, position: 'relative' }}>
+          {user.role !== 'guest' && (
+            <Link to="/notifications" className="pill btn-outline" title="Notifications" aria-label="Notifications">
+              🔔
+            </Link>
+          )}
           <button
             type="button"
             onClick={cycleLang}
@@ -68,17 +64,20 @@ export default function Navbar() {
             <TranslateGlyph />
             <span style={{ fontWeight: 800, color: '#19486A' }}>{lang.toUpperCase()}</span>
           </button>
-          <div className="dropdown">
-            <button className="pill btn-outline" title={`Role: ${user.role}`}>Role: {user.role}</button>
-            <div className="dropdown-menu" style={{ position: 'absolute', right: 0, marginTop: 6, background: '#fff', border: '1px solid #eee', borderRadius: 12, padding: 8, display: 'grid', gap: 6 }}>
-              <button className="pill btn-outline" onClick={()=> loginAs('admin')}><Link to="/admin">Admin</Link></button>
-              <button className="pill btn-outline" onClick={()=> loginAs('receiver')}><Link to="/receiver">Receiver</Link></button>
-              <button className="pill btn-outline" onClick={()=> loginAs('donor')}><Link to="/donor">Donor</Link></button>
-              <button className="pill btn-outline" onClick={logout}>Logout</button>
+          
+          {user.role === 'guest' ? (
+            <>
+              <Link to="/login" className="pill btn-outline" style={{ fontWeight: 700 }}>{t('login')}</Link>
+              <Link to="/signup" className="pill" style={{ background: 'linear-gradient(135deg, #FDCA00, #ffd84a)', color: '#111', fontWeight: 800 }}>{t('signup')}</Link>
+            </>
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <span className="chip" style={{ background: 'var(--brand-primary)', color: 'white', fontWeight: 700 }}>
+                {user.role === 'admin' ? '👑 Admin' : user.role === 'donor' ? '💝 Donor' : '🤝 Receiver'}: {user.name}
+              </span>
+              <button className="pill btn-outline" onClick={logout} style={{ fontWeight: 700 }}>Logout</button>
             </div>
-          </div>
-          <Link to="/login" className="pill btn-outline" style={{ fontWeight: 700 }}>{t('login')}</Link>
-          <Link to="/signup" className="pill" style={{ background: 'linear-gradient(135deg, #FDCA00, #ffd84a)', color: '#111', fontWeight: 800 }}>{t('signup')}</Link>
+          )}
         </div>
       </div>
       <div style={{ height: 1, background: 'linear-gradient(90deg, rgba(25,72,106,.2), rgba(253,202,0,.2))' }} />

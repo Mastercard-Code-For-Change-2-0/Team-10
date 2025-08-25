@@ -80,29 +80,6 @@ export default function About() {
               </ul>
             </div>
           </div>
-
-          <div style={{ marginTop: 20, display: 'grid', gap: 12 }}>
-            <div className="card" style={{ padding: 16 }}>
-              <h3 style={{ margin: 0 }}>Our Team</h3>
-              <p className="muted" style={{ marginTop: 8 }}>A small team of volunteers and engineers building Seva Sahayog for the community.</p>
-              <div style={{ display: 'flex', gap: 12, marginTop: 12, flexWrap: 'wrap' }}>
-                <div className="chip"><strong>Project Lead</strong> — Priya</div>
-                <div className="chip"><strong>Engineering</strong> — Team-10</div>
-                <div className="chip"><strong>Operations</strong> — Volunteers</div>
-              </div>
-            </div>
-
-            <div className="card" style={{ padding: 16 }}>
-              <h3 style={{ margin: 0 }}>Contact & support</h3>
-              <p className="muted" style={{ marginTop: 8 }}>
-                Email: <a href="mailto:hello@sevasahayog.example">hello@sevasahayog.example</a><br />
-                Address: Seva Sahayog Foundation (placeholder), Pune, India
-              </p>
-              <p className="muted" style={{ marginTop: 8 }}>
-                For admin access, verification or partnership inquiries, please reach out to the above email.
-              </p>
-            </div>
-          </div>
         </div>
       </section>
 

@@ -2,19 +2,48 @@ import { createContext, useContext, useMemo, useState, useEffect } from 'react'
 
 const AuthContext = createContext()
 
-const defaultUser = { role: 'guest', name: 'Guest' }
+const defaultUser = { role: 'guest', name: 'Guest', email: null }
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('user')) || defaultUser } catch { return defaultUser }
+    try { 
+      const token = localStorage.getItem('token')
+      const userData = localStorage.getItem('user')
+      if (token && userData) {
+        return JSON.parse(userData)
+      }
+      return defaultUser 
+    } catch { 
+      return defaultUser 
+    }
   })
 
-  useEffect(() => { try { localStorage.setItem('user', JSON.stringify(user)) } catch {} }, [user])
+  useEffect(() => { 
+    try { 
+      localStorage.setItem('user', JSON.stringify(user))
+      if (user.role === 'guest') {
+        localStorage.removeItem('token')
+      }
+    } catch {} 
+  }, [user])
 
-  const loginAs = (role) => setUser({ role, name: role === 'admin' ? 'Admin' : role === 'receiver' ? 'Receiver' : role === 'donor' ? 'Donor' : 'Guest' })
-  const logout = () => setUser(defaultUser)
+  const login = (userData) => {
+    setUser({
+      role: userData.role,
+      name: userData.name || userData.email?.split('@')[0] || 'User',
+      email: userData.email,
+      id: userData.id
+    })
+  }
 
-  const value = useMemo(() => ({ user, setUser, loginAs, logout }), [user])
+  const logout = () => {
+    setUser(defaultUser)
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    window.location.href = '/'
+  }
+
+  const value = useMemo(() => ({ user, setUser, login, logout }), [user])
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
