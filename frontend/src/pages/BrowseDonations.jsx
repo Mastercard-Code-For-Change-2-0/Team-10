@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import DonationCard from '../components/DonationCard.jsx'
 import { MOCK_DONATIONS, CATEGORIES, CONDITIONS } from '../utils/mockDonations.js'
 import { useI18n } from '../contexts/I18nContext.jsx'
+import { listDonations } from '../api/client.js'
 
 function Drawer({ open, onClose, item }) {
   if (!open || !item) return null
@@ -45,8 +46,27 @@ export default function BrowseDonations() {
 
   const cities = useMemo(() => ['All', ...Array.from(new Set(MOCK_DONATIONS.map(d => d.city)))], [])
 
+  const [live, setLive] = useState(null)
+
+  useEffect(() => {
+    let ignore = false
+    async function go() {
+      if (!import.meta.env.VITE_API_URL) return
+      try {
+        const { items } = await listDonations({ q, category: cat==='All'? undefined:cat, condition: cond==='All'? undefined:cond, city: city==='All'? undefined:city, sort, page, pageSize })
+        if (!ignore) setLive(items)
+      } catch (e) {
+        // fall back silently
+      }
+    }
+    go()
+    return () => { ignore = true }
+  }, [q, cat, cond, city, sort, page])
+
+  const source = live && live.length ? live : MOCK_DONATIONS
+
   const filtered = useMemo(() => {
-    let list = [...MOCK_DONATIONS]
+    let list = [...source]
     if (q) list = list.filter(d => d.title.toLowerCase().includes(q.toLowerCase()) || d.description.toLowerCase().includes(q.toLowerCase()))
     if (cat !== 'All') list = list.filter(d => d.category === cat)
     if (cond !== 'All') list = list.filter(d => d.condition === cond)
@@ -55,7 +75,7 @@ export default function BrowseDonations() {
     if (sort === 'Oldest') list.sort((a,b) => a.createdAt - b.createdAt)
     if (sort === 'Quantity') list.sort((a,b) => b.quantity - a.quantity)
     return list
-  }, [q, cat, cond, city, sort])
+  }, [q, cat, cond, city, sort, source])
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize))
   const paged = filtered.slice((page-1)*pageSize, page*pageSize)
