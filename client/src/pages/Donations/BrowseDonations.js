@@ -1,0 +1,1 @@
+export { BrowseDonations } from '../PlaceholderPages';

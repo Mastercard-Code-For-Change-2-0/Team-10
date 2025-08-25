@@ -1,0 +1,28 @@
+{
+  "name": "seva-sahayog-portal",
+  "version": "1.0.0",
+  "description": "Donation Matching Portal for Seva Sahayog Foundation - Mastercard Code for Change 2.0",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm start",
+    "build": "cd client && npm run build",
+  "install-all": "npm install && cd client && npm install && cd ../server && npm install",
+  "deploy": "npm run build && cd server && npm start",
+  "clean": "rm -rf node_modules client/node_modules server/node_modules client/build server/logs || true",
+  "pack:team": "zip -r Team-10-collab.zip . -x \"*/node_modules/*\" \"client/build/*\" \"server/logs/*\" \"*.DS_Store\" \"*.env\" \"server/.env\" \"client/.env\" \"*.git/*\"",
+  "make:skeleton": "bash scripts/make-skeleton.sh",
+    "pack:kits": "cd team-kits && for d in */ ; do zip -r ../$${d%/}.zip \"$d\"; done && cd - >/dev/null"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mastercard-Code-For-Change-2-0/Team-10.git"
+  },
+  "keywords": ["donation", "ngo", "matching", "portal", "hackathon", "seva-sahayog"],
+  "author": "Team-10 - Mastercard Code for Change 2.0",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -1,0 +1,14 @@
+# Code owners for repo areas
+# Frontend
+/client/* @frontend-dev1 @frontend-dev2
+# Backend
+/server/routes/* @backend-dev1 @backend-dev2
+/server/middleware/* @backend-dev1 @backend-dev2
+/server/utils/* @backend-dev1 @backend-dev2
+# Database
+/server/models/* @db-dev1 @db-dev2
+/server/scripts/* @db-dev1 @db-dev2
+# Business analysts docs
+/docs/ba/* @ba1 @ba2
+# All files require at least one owner review
+* @team-lead
