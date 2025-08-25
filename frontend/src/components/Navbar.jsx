@@ -38,7 +38,7 @@ export default function Navbar() {
         <nav style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <NavLink to="/" style={navLinkStyle}>{t('home')}</NavLink>
           <NavLink to="/donate" style={navLinkStyle}>{t('donate')}</NavLink>
-          <NavLink to="/requests" style={navLinkStyle}>{t('requests')}</NavLink>
+          <NavLink to="/browse" style={navLinkStyle}>Browse</NavLink>
           <NavLink to="/about" style={navLinkStyle}>{t('about')}</NavLink>
         </nav>
 
