@@ -1,15 +1,26 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { signup, login } from '../api/client.js'
+import { useAuth } from '../contexts/AuthContext.jsx'
 
 export default function Signup() {
   const [role, setRole] = useState('donor')
   const [form, setForm] = useState({ name: '', email: '', phone: '', password: '', organization: '' })
+  const [error, setError] = useState('')
+  const { loginAs } = useAuth()
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
-    // TODO: Wire to backend register
-    alert('Signup submitted')
+    setError('')
+    try {
+      await signup({ organisationName: form.name, email: form.email, password: form.password, role: role === 'receiver' ? 'receiver' : 'donor' })
+      const res = await login({ email: form.email, password: form.password })
+      if (res?.role) loginAs(res.role)
+      window.location.href = res?.role === 'admin' ? '/admin' : (res?.role === 'receiver' ? '/receiver' : '/donor')
+    } catch (err) {
+      setError(err.message || 'Signup failed')
+    }
   }
 
   return (
@@ -25,6 +36,7 @@ export default function Signup() {
           </div>
 
           <form onSubmit={onSubmit} className="grid grid-2" style={{ marginTop: 8 }}>
+            {error && <div className="card" style={{ padding: 10, background: '#fff0f0', color: '#b00020', gridColumn: '1 / -1' }}>{error}</div>}
             <div>
               <label htmlFor="name">Full name</label>
               <input id="name" name="name" placeholder="Priya Sharma" value={form.name} onChange={handleChange} required />

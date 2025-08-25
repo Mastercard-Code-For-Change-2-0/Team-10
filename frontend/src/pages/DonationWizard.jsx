@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { CATEGORIES, CONDITIONS } from '../utils/mockDonations.js'
+import { createDonation } from '../api/client.js'
 
 const STEPS = ['Details','Photos','Location','Review']
 
@@ -44,10 +45,24 @@ export default function DonationWizard() {
 
   const submit = async () => {
     setSaving(true)
-    // TODO: call API with content checks; for now simulate
-    await new Promise(r => setTimeout(r, 800))
-    setSaving(false)
-    setDone(true)
+    try {
+      await createDonation({
+        title: form.title,
+        category: form.category,
+        condition: form.condition,
+        quantity: form.quantity,
+        description: form.description,
+        city: form.city,
+        location: form.location,
+        availability: form.availability,
+        photos: form.photos.map(p => ({ name: p.name, data: p.data }))
+      })
+      setDone(true)
+    } catch (e) {
+      alert(e.message || 'Submit failed')
+    } finally {
+      setSaving(false)
+    }
   }
 
   if (done) return (

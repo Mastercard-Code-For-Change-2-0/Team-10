@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { CATEGORIES } from '../utils/mockDonations.js'
 import Stepper from '../components/Stepper.jsx'
+import { createRequest } from '../api/client.js'
 
 const STEPS = ['Details','Organization','Review']
 
@@ -30,9 +31,25 @@ export default function RequirementWizard() {
 
   const submit = async () => {
     setSaving(true)
-    await new Promise(r => setTimeout(r, 800))
-    setSaving(false)
-    setDone(true)
+    try {
+      await createRequest({
+        title: form.title,
+        category: form.category,
+        quantity: form.quantity,
+        urgency: form.urgency,
+        description: form.description,
+        orgName: form.orgName,
+        regNo: form.regNo,
+        contact: form.contact,
+        city: form.city,
+        docs: form.docs.map(d => ({ name: d.name, data: d.data }))
+      })
+      setDone(true)
+    } catch (e) {
+      alert(e.message || 'Submit failed')
+    } finally {
+      setSaving(false)
+    }
   }
 
   if (done) return (

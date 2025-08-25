@@ -22,13 +22,8 @@ app.use(helmet());
 const clientUrl = process.env.CLIENT_URL;
 app.use(
 	cors({
-		origin: (origin, cb) => {
-			if (!clientUrl) return cb(null, true); // no restriction if not set
-			if (!origin) return cb(null, true); // same-origin or curl
-			if (origin === clientUrl) return cb(null, true);
-			return cb(null, false);
-		},
-		credentials: !!clientUrl,
+		origin: clientUrl || true,
+		credentials: true,
 	})
 );
 app.use(express.json({ limit: '1mb' }));
@@ -37,18 +32,10 @@ app.use(compression());
 app.use(morgan('dev'));
 
 // Routers (mount under /api)
-try {
-	app.use('/api/auth', require('./routes/auth'));
-} catch {}
-try {
-	app.use('/api/users', require('./routes/users'));
-} catch {}
-try {
-	app.use('/api/donations', require('./routes/donations'));
-} catch {}
-try {
-	app.use('/api/requests', require('./routes/requests'));
-} catch {}
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/donations', require('./routes/donations'));
+app.use('/api/requests', require('./routes/requests'));
 try {
 	app.use('/api/matches', require('./routes/matches'));
 } catch {}

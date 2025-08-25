@@ -1,15 +1,28 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { login } from '../api/client.js'
+import { useAuth } from '../contexts/AuthContext.jsx'
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' })
   const [showPwd, setShowPwd] = useState(false)
+  const [error, setError] = useState('')
+  const { loginAs } = useAuth()
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
-    // TODO: Wire to backend auth
-    alert('Login submitted')
+    setError('')
+    try {
+      const res = await login(form)
+      if (res?.role) loginAs(res.role)
+      // redirect heuristic
+      if (res?.role === 'admin') window.location.href = '/admin'
+      else if (res?.role === 'receiver') window.location.href = '/receiver'
+      else window.location.href = '/donor'
+    } catch (err) {
+      setError(err.message || 'Login failed')
+    }
   }
 
   return (
@@ -19,6 +32,7 @@ export default function Login() {
           <h1 style={{ marginTop: 0, marginBottom: 8, color: 'var(--brand-primary)' }}>Welcome back</h1>
           <p className="muted" style={{ marginTop: 0 }}>Log in to manage your donations or requests.</p>
           <form onSubmit={onSubmit} style={{ display: 'grid', gap: 14, marginTop: 16 }}>
+            {error && <div className="card" style={{ padding: 10, background: '#fff0f0', color: '#b00020' }}>{error}</div>}
             <div>
               <label htmlFor="email">Email</label>
               <input id="email" name="email" type="email" placeholder="you@example.org" value={form.email} onChange={handleChange} required />

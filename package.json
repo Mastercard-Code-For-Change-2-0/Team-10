@@ -3,6 +3,7 @@
 	"private": true,
 	"version": "1.0.0",
 	"description": "Seva Sahayog Donation Matching Portal",
+	"packageManager": "yarn@4.5.1",
 	"workspaces": [
 		"frontend",
 		"server",
@@ -10,8 +11,11 @@
 		"backend"
 	],
 	"scripts": {
-		"dev": "npm --prefix frontend run dev",
-		"build": "npm --prefix frontend run build",
-		"preview": "npm --prefix frontend run preview"
+		"dev": "yarn --cwd frontend dev",
+		"build": "yarn --cwd frontend build",
+		"preview": "yarn --cwd frontend preview",
+		"dev:server": "yarn --cwd server dev",
+		"start:server": "yarn --cwd server start",
+		"seed": "yarn --cwd server seed"
 	}
 }
