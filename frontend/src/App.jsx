@@ -22,6 +22,9 @@ import ReceiverDashboard from './pages/receiver/Dashboard.jsx'
 import DonorDashboard from './pages/donor/Dashboard.jsx'
 import DonationDetail from './pages/DonationDetail.jsx'
 import RequestDetail from './pages/RequestDetail.jsx'
+import Forbidden from './pages/Forbidden.jsx'
+import NotFound from './pages/NotFound.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 export default function App() {
   return (
@@ -31,7 +34,7 @@ export default function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-  <Route path="/admin" element={<AdminDashboard />} />
+  <Route path="/admin" element={<ProtectedRoute allow={["admin"]}><AdminDashboard /></ProtectedRoute>} />
   <Route path="/receiver" element={<ReceiverDashboard />} />
   <Route path="/donor" element={<DonorDashboard />} />
   <Route path="/donate" element={<DonationWizard />} />
@@ -49,7 +52,8 @@ export default function App() {
   <Route path="/admin/reports" element={<ReportsExport />} />
   <Route path="/donations/:id" element={<DonationDetail />} />
   <Route path="/requests/:id" element={<RequestDetail />} />
-        <Route path="*" element={<Landing />} />
+  <Route path="/forbidden" element={<Forbidden />} />
+  <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )

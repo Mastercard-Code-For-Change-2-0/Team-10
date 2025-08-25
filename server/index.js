@@ -36,6 +36,32 @@ app.use(express.urlencoded({ extended: true }));
 app.use(compression());
 app.use(morgan('dev'));
 
+// Routers (mount under /api)
+try {
+	app.use('/api/auth', require('./routes/auth'));
+} catch {}
+try {
+	app.use('/api/users', require('./routes/users'));
+} catch {}
+try {
+	app.use('/api/donations', require('./routes/donations'));
+} catch {}
+try {
+	app.use('/api/requests', require('./routes/requests'));
+} catch {}
+try {
+	app.use('/api/matches', require('./routes/matches'));
+} catch {}
+try {
+	app.use('/api/notifications', require('./routes/notifications'));
+} catch {}
+try {
+	app.use('/api/admin', require('./routes/admin'));
+} catch {}
+try {
+	app.use('/api/upload', require('./routes/upload'));
+} catch {}
+
 // Healthcheck
 app.get('/health', (req, res) => {
 	res.json({
